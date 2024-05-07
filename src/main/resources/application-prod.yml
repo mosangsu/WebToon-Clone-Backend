@@ -4,7 +4,7 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mariadb://localhost:3306/webtoon_clone?rewriteBatchedStatements=true
+    url: jdbc:mariadb://webtoon-clone.chmm4a0oib9n.ap-northeast-2.rds.amazonaws.com:3306/webtoon_clone?rewriteBatchedStatements=true
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: mo!1034419
