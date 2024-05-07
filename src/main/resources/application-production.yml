@@ -4,10 +4,10 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mariadb://localhost:3306/lezhin_clone?rewriteBatchedStatements=true
+    url: jdbc:mariadb://localhost:3306/webtoon_clone?rewriteBatchedStatements=true
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    password: new1234!
+    password: mo!1034419
     hikari:
       maximum-pool-size: 1
   jwt:
