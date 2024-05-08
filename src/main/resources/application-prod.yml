@@ -20,4 +20,4 @@ spring:
       client:
         registration:
           kakao:
-            redirect-uri: "mosworld.kr/login/oauth2/code/kakao"
+            redirect-uri: "http://mosworld.kr/api/login/oauth2/code/kakao"
