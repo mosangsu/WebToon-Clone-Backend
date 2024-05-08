@@ -18,6 +18,12 @@ spring:
     properties:
       hibernate:
         '[format_sql]': true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
 logging:
   level:
     root: INFO

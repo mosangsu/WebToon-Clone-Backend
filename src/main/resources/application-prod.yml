@@ -15,3 +15,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: "mosworld.kr/login/oauth2/code/kakao"
