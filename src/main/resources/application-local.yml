@@ -1,4 +1,6 @@
 # 로컬 설정
+server:
+  port: 8080
 spring:
   config:
     activate:
