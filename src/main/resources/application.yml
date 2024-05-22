@@ -34,3 +34,5 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me # "사용자 정보 가져오기" 항목
             user-info-authentication-method: header
             user-name-attribute: id # 식별자
+  cache:
+    type: redis

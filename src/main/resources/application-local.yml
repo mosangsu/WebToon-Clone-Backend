@@ -24,6 +24,10 @@ spring:
         registration:
           kakao:
             redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+  data:
+    redis:
+      host: localhost
+      port: 6379
 logging:
   level:
     root: INFO

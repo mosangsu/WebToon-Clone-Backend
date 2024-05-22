@@ -21,3 +21,7 @@ spring:
         registration:
           kakao:
             redirect-uri: "http://mosworld.kr/api/login/oauth2/code/kakao"
+  data:
+    redis:
+      host: webtoon-clone-redis.kxrrtr.ng.0001.apn2.cache.amazonaws.com
+      port: 6379
