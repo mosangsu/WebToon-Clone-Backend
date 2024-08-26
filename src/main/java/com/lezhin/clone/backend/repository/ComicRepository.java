@@ -12,4 +12,5 @@ import java.util.List;
 
 public interface ComicRepository extends JpaRepository<Comic, Long> {
     List<Comic> findByEpisodeSchedule(EpisodeSchedule episodeSchedule);
+    Optional<Comic> findByLinkName(String linkName);
 }

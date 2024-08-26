@@ -1,5 +1,6 @@
 package com.lezhin.clone.backend.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -9,8 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -89,6 +92,12 @@ public class Comic extends Timestamped {
 
     @Convert(converter = EpisodeSchedule.EpisodeScheduleAttributeConverter.class)
     private EpisodeSchedule episodeSchedule;
+
+    @OneToMany(mappedBy = "comic")
+    private List<Episode> episodes;
+
+    @OneToMany(mappedBy = "comic", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ComicTag> comicTags;
 
     @Column
     private int freeInterval;

@@ -27,4 +27,9 @@ public class ComicService {
         List<Comic> e = comicRepository.findByEpisodeSchedule(episodeSchedule);
         return e.stream().map(p -> modelMapper.map(p, ComicDto.Scheduled.Res.class)).collect(Collectors.toList());
     }
+
+    public Object getComic(String title) {
+        Comic c = comicRepository.findByLinkName(title).get();
+        return modelMapper.map(c, ComicDto.Comic.Res.class);
+    }
 }
