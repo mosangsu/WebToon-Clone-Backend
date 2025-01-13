@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum OAuth2Provider {
     GOOGLE("google"),
-    FACEBOOK("facebook"),
     GITHUB("github"),
     NAVER("naver"),
-    KAKAO("kakao");
+    KAKAO("kakao"),
+    NONE("none");
 
     private final String registrationId;
 }

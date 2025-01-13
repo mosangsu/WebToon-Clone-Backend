@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset='utf-8'>
+    <title>웹툰 클론 사이트 이메일 인증</title>
+  </head>
+  <body>
+    <div style='margin:30px auto;width:600px;border:10px solid #f7f7f7'>
+      <div style='border:1px solid #dedede'>
+      <h1 style='padding:30px 30px 0;background:#f7f7f7;color:#555;font-size:1.4em'>
+      인증번호 안내
+      </h1>
+      <p style='margin:20px 0 0;padding:30px 30px 30px;border-bottom:1px solid #eee;line-height:1.7em'>
+        이 메일은 서비스를 원활히 이용하기 위한 인증메일 입니다.<br>
+        아래에서 인증번호를 확인하신 후 입력란에 입력하시고 다음 단계를 진행하십시오.
+      </p>
+      <p style='margin:0;padding:30px 30px 30px;border-bottom:1px solid #eee;line-height:1.7em'>
+      <span style='display:inline-block;width:130px'>인증번호</span> <strong style='color:#ff3061'>
+        <p th:text="${certificationNumber}"></p>
+      </strong>
+      </p>
+      </div>
+    </div>
+  </body>
+</html>

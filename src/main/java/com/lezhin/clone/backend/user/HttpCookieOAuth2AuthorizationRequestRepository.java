@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.lezhin.clone.backend.config.WebMvcConfig;
 import com.lezhin.clone.backend.util.CookieUtil;
 
 @RequiredArgsConstructor
@@ -31,9 +30,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
                                          HttpServletResponse response) {
         if (authorizationRequest == null) {
-            CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
+            removeAuthorizationRequest(request, response);
             return;
         }
         
@@ -57,6 +54,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
                     mode,
                     COOKIE_EXPIRE_SECONDS);
         }
+        response.addHeader("redirectUriAfterLogin", mode);
     }
 
     @Override

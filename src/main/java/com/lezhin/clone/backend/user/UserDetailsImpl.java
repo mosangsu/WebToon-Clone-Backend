@@ -22,11 +22,14 @@ public class UserDetailsImpl implements OAuth2User, UserDetails {
 
     private MemberType memberType;
 
+    private String nickname;
+
     private OAuth2UserInfo userInfo;
 
-    public UserDetailsImpl(OAuth2UserInfo userInfo, Long memberId, MemberType memberType) {
+    public UserDetailsImpl(OAuth2UserInfo userInfo, Long memberId, String nickname, MemberType memberType) {
         this.userInfo = userInfo;
         this.memberId = memberId;
+        this.nickname = nickname;
         this.memberType = memberType;
     }
 
@@ -41,7 +44,12 @@ public class UserDetailsImpl implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return userInfo.getEmail();
+        if (userInfo != null) return userInfo.getEmail();
+        else return null;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 
     @Override
@@ -79,12 +87,14 @@ public class UserDetailsImpl implements OAuth2User, UserDetails {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return userInfo.getAttributes();
+        if (userInfo != null) return userInfo.getAttributes();
+        else return null;
     }
 
     @Override
     public String getName() {
-        return userInfo.getEmail();
+        if (userInfo != null) return userInfo.getEmail();
+        else return null;
     }
 
     public OAuth2UserInfo getUserInfo() {

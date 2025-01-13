@@ -13,7 +13,11 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 import java.util.List;
+
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -36,6 +40,21 @@ public class Episode extends Timestamped {
     @Column(nullable = false)
     private String thumbnail;
 
+    private LocalDate freeDate;
+
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private int order;
+    @Column(nullable = false)
+    private String linkName;
+
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private int price;
+
     @OneToMany(mappedBy = "episode", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<EpisodePicture> episodePictures;
+
+    @OneToMany(mappedBy = "episode")
+    private List<MemberEpisode> memberEpisodes;
 }

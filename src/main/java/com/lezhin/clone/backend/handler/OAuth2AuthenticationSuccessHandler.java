@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,11 @@ import com.lezhin.clone.backend.util.JwtUtil;
 import com.lezhin.clone.backend.util.RedisUtil;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.lezhin.clone.backend.user.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
 import static com.lezhin.clone.backend.user.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -78,9 +83,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             // TODO: DB 저장
             // TODO: 액세스 토큰, 리프레시 토큰 발급
             // TODO: 리프레시 토큰 DB 저장
-            log.info("email={}, name={}, nickname={}, accessToken={}", principal.getUserInfo().getEmail(),
+            log.info("email={}, name={}, accessToken={}", principal.getUserInfo().getEmail(),
                 principal.getUserInfo().getName(),
-                principal.getUserInfo().getNickname(),
                 principal.getUserInfo().getAccessToken());
             // 기존에 가입된 계정이 있으면 로그인 처리
             if (principal.getUserInfo().isExist()) {
@@ -98,19 +102,39 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     return UriComponentsBuilder.fromUriString(targetUrl)
                             .queryParam("access_token", token)
                             .queryParam("id", principal.getMemberId())
-                            .queryParam("username", principal.getUsername())
-                            .queryParam("type", customObjectMapper.writeValueAsString(principal.getMemberType()) )
+                            .queryParam("nickname", URLEncoder.encode(principal.getNickname(), java.nio.charset.StandardCharsets.UTF_8.toString()))
+                            .queryParam("type", URLEncoder.encode(customObjectMapper.writeValueAsString(principal.getMemberType()), java.nio.charset.StandardCharsets.UTF_8.toString()))
                             .build().toUriString();
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
+                } catch (UnsupportedEncodingException e2) {
+                    log.error(e2.getMessage());
                 }
             }
             // 없을 경우 회원가입 진행
             else {
-                return UriComponentsBuilder.fromUriString(targetUrl)
-                        .queryParam("email", principal.getUserInfo().getEmail())
-                        .queryParam("provider", principal.getUserInfo().getProvider())
+                String code = request.getParameter("code");
+                String state = request.getParameter("state");
+                try {
+
+                    String validationToken = jwtUtil.generateValidationToken(principal.getUserInfo().getEmail(), code, state, 1000L * 60 * 3);  // 3분동안 유효한 유효성 인증 토큰 생성
+                    redisUtil.setDataExpire("validationCode", principal.getUserInfo().getEmail(), code + state, 1000L * 60 * 3);
+                    
+                    CookieUtil.addCookie(response, "validationToken", validationToken, 60 * 3); // 토큰을 쿠키로 전송
+                    CookieUtil.addCookie(response, "id", principal.getUserInfo().getId(), 60 * 3, false);
+                    CookieUtil.addCookie(response, "email", principal.getUserInfo().getEmail(), 60 * 3, false);
+                    CookieUtil.addCookie(response, "name", URLEncoder.encode(principal.getUserInfo().getName(), java.nio.charset.StandardCharsets.UTF_8.toString()), 60 * 3, false);
+                    CookieUtil.addCookie(response, "profileImageUrl", principal.getUserInfo().getProfileImageUrl(), 60 * 3, false);
+                    CookieUtil.addCookie(response, "provider", principal.getUserInfo().getProvider().name(), 60 * 3, false);
+
+                } catch (UnsupportedEncodingException e) {
+                    log.error(e.getMessage());
+                }
+                return UriComponentsBuilder.fromUriString(targetUrl + "/callback")
+                        .queryParam("code", code)
+                        .queryParam("state", state)
                         .build().toUriString();
+                
             }
 
         } else if ("unlink".equalsIgnoreCase(mode)) {

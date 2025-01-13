@@ -17,7 +17,10 @@ import com.lezhin.clone.backend.enums.MemberType;
 import com.lezhin.clone.backend.enums.OAuth2Provider;
 import com.lezhin.clone.backend.exception.OAuth2AuthenticationProcessingException;
 import com.lezhin.clone.backend.repository.MemberRepository;
+import com.lezhin.clone.backend.user.GithubOAuth2UserInfo;
+import com.lezhin.clone.backend.user.GoogleOAuth2UserInfo;
 import com.lezhin.clone.backend.user.KakaoOAuth2UserInfo;
+import com.lezhin.clone.backend.user.NaverOAuth2UserInfo;
 import com.lezhin.clone.backend.user.OAuth2UserInfo;
 import com.lezhin.clone.backend.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +56,12 @@ public class OAuth2Service extends DefaultOAuth2UserService {
         UserDetailsImpl userDetailsImpl = null;
         if (OAuth2Provider.KAKAO.getRegistrationId().equals(registrationId)) {
             oAuth2UserInfo = new KakaoOAuth2UserInfo(accessToken, attributes);
+        } else if (OAuth2Provider.NAVER.getRegistrationId().equals(registrationId)) {
+            oAuth2UserInfo = new NaverOAuth2UserInfo(accessToken, attributes);
+        } else if (OAuth2Provider.GOOGLE.getRegistrationId().equals(registrationId)) {
+            oAuth2UserInfo = new GoogleOAuth2UserInfo(accessToken, attributes);
+        } else if (OAuth2Provider.GITHUB.getRegistrationId().equals(registrationId)) {
+            oAuth2UserInfo = new GithubOAuth2UserInfo(accessToken, attributes);
         } else {
             throw new OAuth2AuthenticationProcessingException(registrationId + " 로그인은 지원되지 않습니다.");
         }
@@ -60,13 +69,13 @@ public class OAuth2Service extends DefaultOAuth2UserService {
         if (StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             String email = oAuth2UserInfo.getEmail();
             // 해당 메일에 연동되어있거나, 직접 가입한 계정이 있는지 조회
-            Optional<Member> findMember = memberRepository.findByIsOauth2AndOauth2EmailOrUsername(false, email, email);
+            Optional<Member> findMember = memberRepository.findByIsOauth2AndOauth2EmailOrUsername(true, email, email);
             boolean isMember = findMember.isPresent();
             
             // Oauth2 인증 후 기존 계정이 있으면 해당 계정으로 로그인, 없으면 회원가입으로 분기처리하기 위해 사전 처리 
             oAuth2UserInfo.setIsExist(isMember);    // 기존 계정 유무
             if (isMember) {
-                userDetailsImpl = new UserDetailsImpl(oAuth2UserInfo, findMember.get().getMemberId(), findMember.get().getType());
+                userDetailsImpl = new UserDetailsImpl(oAuth2UserInfo, findMember.get().getMemberId(), findMember.get().getNickname(), findMember.get().getType());
             } else {
                 userDetailsImpl = new UserDetailsImpl(oAuth2UserInfo, MemberType.USER);
             }

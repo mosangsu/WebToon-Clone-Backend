@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.lezhin.clone.backend.entity.Member;
 // import com.lezhin.clone.backend.entity.Member;
 import com.lezhin.clone.backend.enums.MemberType;
+import com.lezhin.clone.backend.user.UserDetailsImpl;
 import com.nimbusds.jose.util.StandardCharset;
 
 import java.nio.charset.StandardCharsets;
@@ -51,16 +52,20 @@ public class JwtUtil {
         return extractAllClaims(token).getExpiration();
     }
 
-    public String getUsername(String token) {
-        return extractAllClaims(token).get("username", String.class);
+    public String get(String token, String name) {
+        return extractAllClaims(token).get(name, String.class);
+    }
+
+    public String getNickname(String token) {
+        return extractAllClaims(token).get("nickname", String.class);
     }
 
     public Long getMemberId(String token) {
         return extractAllClaims(token).get("id", Long.class);
     }
 
-    public MemberType getMemberType(String token) {
-        return extractAllClaims(token).get("memberType", MemberType.class);
+    public String getMemberType(String token) {
+        return extractAllClaims(token).get("memberType", String.class);
     }
 
     public Boolean isTokenExpired(String token) {
@@ -68,28 +73,28 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
     
-    public String generateToken(String username, Long memberId, MemberType memberType) {
-        return doGenerateToken(username, memberId, TOKEN_VALIDATION_MILLISECOND, memberType);
+    public String generateToken(String nickname, Long memberId, MemberType memberType) {
+        return doGenerateToken(nickname, memberId, TOKEN_VALIDATION_MILLISECOND, memberType);
     }
     
     public String generateToken(Member member) {
-        return doGenerateToken(member.getUsername(), member.getMemberId(), TOKEN_VALIDATION_MILLISECOND, member.getType());
+        return doGenerateToken(member.getNickname(), member.getMemberId(), TOKEN_VALIDATION_MILLISECOND, member.getType());
     }
 
-    public String generateRefreshToken(String username, Long memberId, MemberType memberType) {
-        return doGenerateToken(username, memberId, REFRESH_TOKEN_VALIDATION_MILLISECOND, memberType);
+    public String generateRefreshToken(String nickname, Long memberId, MemberType memberType) {
+        return doGenerateToken(nickname, memberId, REFRESH_TOKEN_VALIDATION_MILLISECOND, memberType);
     }
 
     public String generateRefreshToken(Member member) {
-        return doGenerateToken(member.getUsername(), member.getMemberId(), REFRESH_TOKEN_VALIDATION_MILLISECOND, member.getType());
+        return doGenerateToken(member.getNickname(), member.getMemberId(), REFRESH_TOKEN_VALIDATION_MILLISECOND, member.getType());
     }
 
-    public String doGenerateToken(String username, Long memberId, long expireTime, MemberType memberType) {
+    public String doGenerateToken(String nickname, Long memberId, long expireTime, MemberType memberType) {
 
         // claims.issuedAt(null)
         String jwt = Jwts.builder()
             .claims()
-            .add("username", username)
+            .add("nickname", nickname)
             .add("id", memberId)
             .add("memberType", memberType.getAuthority())
             .and()
@@ -101,10 +106,26 @@ public class JwtUtil {
         return jwt;
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsername(token);
+    public String generateValidationToken(String email, String code, String state, long expireTime) {
 
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        String jwt = Jwts.builder()
+            .claims()
+            .add("email", email)
+            .add("code", code)
+            .add("state", state)
+            .and()
+            .signWith(getSigningKey())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + expireTime))
+            .compact();
+
+        return jwt;
+    }
+
+    public Boolean validateToken(String token, UserDetailsImpl userDetails) {
+        final Long memberId = getMemberId(token);
+
+        return (memberId.equals(userDetails.getMemberId()) && !isTokenExpired(token));
     }
 
 }

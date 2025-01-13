@@ -3,28 +3,38 @@ import java.util.Map;
 
 import com.lezhin.clone.backend.enums.OAuth2Provider;
 
-public interface OAuth2UserInfo {
+public abstract class OAuth2UserInfo {
+    protected final Map<String, Object> attributes;
+    private final String accessToken;
+    private boolean isExist;
+    
+    public OAuth2UserInfo(String accessToken, Map<String, Object> attributes) {
+        this.accessToken = accessToken;
+        this.attributes = attributes;
+    }
 
-    OAuth2Provider getProvider();
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
-    String getAccessToken();
+    public String getAccessToken() {
+        return this.accessToken;
+    }
 
-    Map<String, Object> getAttributes();
+    public void setIsExist(boolean isExist) {
+        this.isExist = isExist;
+    }
+    public boolean isExist() {
+        return this.isExist;
+    }
 
-    String getId();
+    public abstract OAuth2Provider getProvider();
 
-    String getEmail();
+    public abstract String getId();
 
-    String getName();
+    public abstract String getEmail();
 
-    String getFirstName();
+    public abstract String getName();
 
-    String getLastName();
-
-    String getNickname();
-
-    String getProfileImageUrl();
-
-    void setIsExist(boolean isExist);
-    boolean isExist();
+    public abstract String getProfileImageUrl();
 }

@@ -67,7 +67,13 @@ public class Comic extends Timestamped {
     @ColumnDefault("0")
     @Column(nullable = false)
     private int order;
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private int viewCount;
 
+    @ColumnDefault("0")
+    @Column(columnDefinition = "TINYINT")
+    private boolean isCompleted;
     @ColumnDefault("0")
     @Column(columnDefinition = "TINYINT")
     private boolean isFree;
@@ -98,6 +104,15 @@ public class Comic extends Timestamped {
 
     @OneToMany(mappedBy = "comic", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ComicTag> comicTags;
+
+    @OneToMany(mappedBy = "comic", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<SubscribedComic> subscribedComics;
+
+    @OneToMany(mappedBy = "comic", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<LikedComic> likedComics;
+
+    @OneToMany(mappedBy = "baseComic")
+    private List<ComicRecommendation> comicRecommendations;
 
     @Column
     private int freeInterval;

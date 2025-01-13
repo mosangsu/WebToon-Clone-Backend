@@ -10,6 +10,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 import com.lezhin.clone.backend.filter.JwtRequestFilter;
 import com.lezhin.clone.backend.handler.OAuth2AuthenticationSuccessHandler;
@@ -34,6 +36,14 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    // 헤더 또는 쿠키에 url 관련 내용 허용
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        DefaultHttpFirewall firewall = new DefaultHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        return firewall;
+    }
+
     // 시큐리티 접근 권한 관리
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +52,7 @@ public class SecurityConfig {
             .httpBasic(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req -> req
                 .requestMatchers("/user/login").permitAll()
+                .requestMatchers("/user/signup").permitAll()
                 .requestMatchers("/user/**").authenticated()
                 .anyRequest().permitAll()
             )

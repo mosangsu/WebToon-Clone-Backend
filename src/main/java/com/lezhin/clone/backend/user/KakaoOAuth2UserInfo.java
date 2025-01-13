@@ -4,98 +4,38 @@ import java.util.Map;
 
 import com.lezhin.clone.backend.enums.OAuth2Provider;
 
-public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
+public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
-    private final Map<String, Object> attributes;
-    private final String accessToken;
-    private final String id;
-    private final String email;
-    private final String name;
-    private final String firstName;
-    private final String lastName;
-    private final String nickName;
-    private final String profileImageUrl;
-    private boolean isExist;
+    private Long id;
 
     @SuppressWarnings("unchecked")
     public KakaoOAuth2UserInfo(String accessToken, Map<String, Object> attributes) {
-        this.accessToken = accessToken;
-        // attributes 맵의 kakao_account 키의 값에 실제 attributes 맵이 할당되어 있음
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-        this.attributes = kakaoProfile;
-
-        this.id = ((Long) attributes.get("id")).toString();
-        this.email = (String) kakaoAccount.get("email");
-
-        this.name = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.nickName = (String) attributes.get("nickname");
-        ;
-        this.profileImageUrl = (String) attributes.get("profile_image_url");
-
-        this.attributes.put("id", id);
-        this.attributes.put("email", this.email);
+        super(accessToken, (Map<String, Object>) attributes.get("kakao_account"));
+        this.id = (Long) attributes.get("id");
     }
 
     @Override
     public OAuth2Provider getProvider() {
         return OAuth2Provider.KAKAO;
     }
-
-    @Override
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
+    
     @Override
     public String getId() {
-        return id;
+        return this.id.toString();
     }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
+ 
     @Override
     public String getName() {
-        return name;
+        return (String) ((Map<String, Object>) attributes.get("profile")).get("nickname");
     }
-
+ 
     @Override
-    public String getFirstName() {
-        return firstName;
+    public String getEmail() {
+        return (String) attributes.get("email");
     }
-
-    @Override
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public String getNickname() {
-        return nickName;
-    }
-
+ 
     @Override
     public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    @Override
-    public boolean isExist() {
-        return isExist;
-    }
-
-    @Override
-    public void setIsExist(boolean isExist) {
-        this.isExist = isExist;
+        return (String) ((Map<String, Object>) attributes.get("profile")).get("thumbnail_image_url");
     }
 }

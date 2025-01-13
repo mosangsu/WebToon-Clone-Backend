@@ -6,7 +6,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.lezhin.clone.backend.enums.CoinType;
 import com.lezhin.clone.backend.enums.EpisodeSchedule;
+import com.lezhin.clone.backend.enums.RankingType;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -23,5 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(@NonNull FormatterRegistry registry) {
         registry.addConverter(new EpisodeSchedule.EpisodeScheduleConverter());
+        registry.addConverter(new RankingType.RankingTypeConverter());
+        registry.addConverter(new CoinType.CoinTypeConverter());
     }
 }
