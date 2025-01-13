@@ -14,7 +14,7 @@ import com.lezhin.clone.backend.enums.RankingType;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @NonNull
-    public static String[] allowedOrigins = {"http://localhost:3000"};
+    public static String[] allowedOrigins = {"http://localhost:3000", "http://mosworld.kr"};
 
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
