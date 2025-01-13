@@ -26,7 +26,10 @@ spring:
           google:
             redirect-uri: "http://mosworld.kr/api/login/oauth2/code/google"
           github:
+            client-id: Ov23lin09L2WLb93lEQI
+            client-secret: 9bbadf9450fa1b26e10269d3ec1a132664199e57
             redirect-uri: "http://mosworld.kr/api/login/oauth2/code/github"
+            
   data:
     redis:
       host: webtoon-clone-redis.kxrrtr.ng.0001.apn2.cache.amazonaws.com
