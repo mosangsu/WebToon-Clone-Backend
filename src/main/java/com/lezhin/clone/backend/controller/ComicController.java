@@ -57,7 +57,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/adult")
-    public Response getAdultComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getAdultComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getAdultComicList(pageable);
@@ -75,7 +75,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/new")
-    public Response getNewComicList(@PageableDefault(size = 4) Pageable pageable) {
+    public Response getNewComicList(@PageableDefault(size = 12) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getNewComicList(pageable);
@@ -93,7 +93,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/completed")
-    public Response getCompletedComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getCompletedComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getCompletedComicList(pageable);
@@ -111,7 +111,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/free")
-    public Response getFreeComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getFreeComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getFreeComicList(pageable);
@@ -129,7 +129,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/presub")
-    public Response getPresubComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getPresubComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getPresubComicList(pageable);
@@ -147,7 +147,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/updated")
-    public Response getUpdatedComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getUpdatedComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getUpdatedComicList(pageable);
@@ -165,7 +165,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/event")
-    public Response getEventComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getEventComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getEventComicList(pageable);
@@ -183,7 +183,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/awarded")
-    public Response getAwardedComicList(@PageableDefault(size = 6) Pageable pageable) {
+    public Response getAwardedComicList(@PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getAwardedComicList(pageable);
@@ -201,7 +201,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/owned")
-    public Response getOwnedComicList(@RequestAttribute @NonNull Long memberId, @RequestParam(required = false) String q, @PageableDefault(size = 6) Pageable pageable) {
+    public Response getOwnedComicList(@RequestAttribute @NonNull Long memberId, @RequestParam(required = false) String q, @PageableDefault(size = 36) Pageable pageable) {
         
 
         Response response = new Response();
@@ -220,7 +220,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/subscribed")
-    public Response getSubscribedComicList(@RequestAttribute @NonNull Long memberId, @RequestParam(required = false) String q, @PageableDefault(size = 6) Pageable pageable) {
+    public Response getSubscribedComicList(@RequestAttribute @NonNull Long memberId, @RequestParam(required = false) String q, @PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getSubscribedComicList(memberId, q, pageable);
@@ -238,7 +238,7 @@ public class ComicController {
      * @return com.lezhin.clone.backend.dto.Response
      */
     @GetMapping("/read")
-    public Response getReadComicList(@RequestParam Integer[] idList, @RequestParam(required = false) String q, @PageableDefault(size = 6) Pageable pageable) {
+    public Response getReadComicList(@RequestParam Integer[] idList, @RequestParam(required = false) String q, @PageableDefault(size = 36) Pageable pageable) {
         
         Response response = new Response();
         Object result = comicService.getReadComicList(idList, q, pageable);
