@@ -24,7 +24,7 @@ jobs:
     - name: Set Yaml
       uses: microsoft/variable-substitution@v1
       with:
-        files: ./src/main/resources/application-prod.yml 
+        files: /src/main/resources/application-prod.yml 
       env:
         spring.datasource.username: ${{ secrets.PROD_MARIADB_USERNAME }}
         spring.datasource.password: ${{ secrets.PROD_MARIADB_PASSWORD }}
