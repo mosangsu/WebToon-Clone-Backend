@@ -68,6 +68,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+task copyPrivate(type: Copy) {
+	copy {
+		from './Webtoon-Clone-Backend-Submodule'
+		include '*.yml'
+		into 'src/main/resources'
+	}
+}
+
 clean {
    delete file('src/main/generated')
 }
